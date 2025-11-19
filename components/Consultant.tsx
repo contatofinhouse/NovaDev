@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Send, Bot, User, Sparkles, Loader2, FileText, Image as ImageIcon, Zap } from 'lucide-react';
+import { Send, Bot, User, Sparkles, Loader2, FileText, Image as ImageIcon, Zap, ShieldCheck, Lock } from 'lucide-react';
 import { Chat } from "@google/genai";
 import { createConsultantChat, generateProjectBrief, generateConceptImage } from '../services/geminiService';
 import { Message, ProjectBrief } from '../types';
@@ -17,6 +17,10 @@ const Consultant: React.FC<ConsultantProps> = ({ onViewProject }) => {
   const [projectBrief, setProjectBrief] = useState<ProjectBrief | null>(null);
   const [isGeneratingBrief, setIsGeneratingBrief] = useState(false);
   const [isGeneratingImage, setIsGeneratingImage] = useState(false);
+  
+  // Anti-bot states
+  const [isVerified, setIsVerified] = useState(false);
+  const [lastMessageTime, setLastMessageTime] = useState(0);
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
@@ -37,8 +41,23 @@ const Consultant: React.FC<ConsultantProps> = ({ onViewProject }) => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
+  const handleVerifyHuman = () => {
+    // Simple verification simulation
+    setTimeout(() => {
+      setIsVerified(true);
+    }, 500);
+  };
+
   const handleSendMessage = async () => {
     if (!inputValue.trim() || !chatInstance) return;
+
+    // Anti-bot: Rate Limiting
+    const now = Date.now();
+    if (now - lastMessageTime < 2000) {
+      // Silently fail or warn if user is typing too fast (bot behavior)
+      return;
+    }
+    setLastMessageTime(now);
 
     const userText = inputValue;
     setInputValue('');
@@ -126,7 +145,7 @@ const Consultant: React.FC<ConsultantProps> = ({ onViewProject }) => {
                   </div>
                 </div>
               </div>
-              {messages.length > 3 && (
+              {isVerified && messages.length > 3 && (
                  <button 
                   onClick={handleGenerateBrief}
                   disabled={isGeneratingBrief}
@@ -138,7 +157,7 @@ const Consultant: React.FC<ConsultantProps> = ({ onViewProject }) => {
               )}
             </div>
 
-            <div className="flex-1 overflow-y-auto p-6 space-y-6 bg-slate-950/50">
+            <div className="flex-1 overflow-y-auto p-6 space-y-6 bg-slate-950/50 relative">
               {messages.map((msg, idx) => (
                 <div key={idx} className={`flex gap-4 ${msg.role === 'user' ? 'flex-row-reverse' : ''}`}>
                   <div className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 ${msg.role === 'user' ? 'bg-slate-700' : 'bg-cyan-900/50'}`}>
@@ -168,26 +187,46 @@ const Consultant: React.FC<ConsultantProps> = ({ onViewProject }) => {
                 </div>
               )}
               <div ref={messagesEndRef} />
+              
+              {/* Anti-bot Blur/Lock Overlay if not verified */}
+              {!isVerified && (
+                <div className="absolute inset-0 bg-slate-950/60 backdrop-blur-[2px] flex items-center justify-center z-10">
+                   <div className="text-center p-6">
+                     <Lock className="w-12 h-12 text-slate-500 mx-auto mb-4" />
+                     <p className="text-slate-400 text-sm mb-4">Proteção Anti-Bot Ativa</p>
+                   </div>
+                </div>
+              )}
             </div>
 
             <div className="p-4 bg-slate-900 border-t border-slate-800">
-              <div className="flex gap-2 relative">
-                <input
-                  type="text"
-                  value={inputValue}
-                  onChange={(e) => setInputValue(e.target.value)}
-                  onKeyDown={(e) => e.key === 'Enter' && handleSendMessage()}
-                  placeholder="Descreva sua ideia de projeto..."
-                  className="flex-1 bg-slate-950 border border-slate-700 hover:border-slate-600 focus:border-cyan-500 rounded-xl px-4 py-3 text-slate-200 focus:outline-none focus:ring-1 focus:ring-cyan-500/50 transition-all"
-                />
-                <button
-                  onClick={handleSendMessage}
-                  disabled={!inputValue.trim() || isTyping}
-                  className="bg-cyan-600 hover:bg-cyan-500 disabled:opacity-50 disabled:cursor-not-allowed text-white p-3 rounded-xl transition-colors"
+              {isVerified ? (
+                <div className="flex gap-2 relative animate-fade-in">
+                  <input
+                    type="text"
+                    value={inputValue}
+                    onChange={(e) => setInputValue(e.target.value)}
+                    onKeyDown={(e) => e.key === 'Enter' && handleSendMessage()}
+                    placeholder="Descreva sua ideia de projeto..."
+                    className="flex-1 bg-slate-950 border border-slate-700 hover:border-slate-600 focus:border-cyan-500 rounded-xl px-4 py-3 text-slate-200 focus:outline-none focus:ring-1 focus:ring-cyan-500/50 transition-all"
+                  />
+                  <button
+                    onClick={handleSendMessage}
+                    disabled={!inputValue.trim() || isTyping}
+                    className="bg-cyan-600 hover:bg-cyan-500 disabled:opacity-50 disabled:cursor-not-allowed text-white p-3 rounded-xl transition-colors"
+                  >
+                    <Send className="w-5 h-5" />
+                  </button>
+                </div>
+              ) : (
+                <button 
+                  onClick={handleVerifyHuman}
+                  className="w-full py-3 bg-slate-800 hover:bg-slate-700 text-cyan-400 font-bold rounded-xl transition-colors flex items-center justify-center gap-3 border border-slate-700 hover:border-cyan-500/50"
                 >
-                  <Send className="w-5 h-5" />
+                  <ShieldCheck className="w-5 h-5" />
+                  Iniciar Chat Seguro
                 </button>
-              </div>
+              )}
             </div>
           </div>
 

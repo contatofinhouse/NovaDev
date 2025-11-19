@@ -6,7 +6,7 @@ import PortfolioSection, { ProjectData } from './components/PortfolioSection';
 import PricingSection from './components/PricingSection';
 import ProjectPage from './components/ProjectPage';
 import Consultant from './components/Consultant';
-import { Mail, MapPin, Phone, Github, Twitter, Linkedin } from 'lucide-react';
+import { Mail, MapPin, Phone, Github, Twitter, Linkedin, MessageCircle } from 'lucide-react';
 
 type ViewState = 'home' | 'project';
 
@@ -59,6 +59,21 @@ const App: React.FC = () => {
       {view === 'project' && selectedProject && (
         <ProjectPage project={selectedProject} onBack={handleBackToHome} />
       )}
+
+      {/* WhatsApp Floating Button */}
+      <a 
+        href="https://wa.me/5511912345678" 
+        target="_blank" 
+        rel="noopener noreferrer"
+        className="fixed bottom-6 right-6 z-50 bg-green-500 hover:bg-green-600 text-white p-4 rounded-full shadow-[0_0_20px_rgba(34,197,94,0.3)] transition-all hover:scale-110 group flex items-center justify-center"
+        aria-label="Fale conosco no WhatsApp"
+      >
+        <span className="absolute right-full mr-4 bg-white text-slate-900 px-3 py-1 rounded-lg text-xs font-bold opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap shadow-lg pointer-events-none">
+          Orçamento Rápido
+        </span>
+        <MessageCircle className="w-8 h-8 fill-current" />
+        <span className="absolute top-0 right-0 w-3 h-3 bg-red-500 rounded-full border-2 border-slate-900 animate-pulse"></span>
+      </a>
 
       {/* Footer - Only show on home or customize for project view if needed */}
       <footer className="bg-slate-950 border-t border-slate-900 pt-20 pb-10">
