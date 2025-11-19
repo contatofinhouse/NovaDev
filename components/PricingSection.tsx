@@ -17,7 +17,7 @@ const PricingSection: React.FC = () => {
           <h2 className="text-3xl md:text-5xl font-bold mb-6">Pare de pagar caro por desenvolvimento</h2>
           <p className="text-slate-400 max-w-2xl mx-auto text-lg">
             Esqueça orçamentos de R$ 5.000 ou R$ 10.000 de entrada. 
-            Na NovaDev, você paga uma <span className="text-cyan-400 font-semibold">mensalidade acessível</span> e nós cuidamos de toda a tecnologia, hospedagem e manutenção. Melhor que Wix, porque nós fazemos para você.
+            Na <span className="text-cyan-400 font-semibold">NovaDevX</span>, você paga uma mensalidade acessível e nós cuidamos de toda a tecnologia, hospedagem e manutenção. Melhor que Wix, porque nós fazemos para você.
           </p>
         </div>
 

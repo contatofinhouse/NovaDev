@@ -46,7 +46,7 @@ const ServiceSection: React.FC = () => {
     <section id="services" className="py-24 bg-slate-950 relative border-b border-slate-900">
       <div className="container mx-auto px-6">
         <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-5xl font-bold mb-6">Por que NovaDev?</h2>
+          <h2 className="text-3xl md:text-5xl font-bold mb-6">Por que NovaDevX?</h2>
           <p className="text-slate-400 max-w-2xl mx-auto text-lg">
             O modelo tradicional de agência morreu. Oferecemos <strong>Website as a Service</strong>. 
             Tecnologia de ponta, zero dor de cabeça técnica e preços previsíveis.

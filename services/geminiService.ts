@@ -9,7 +9,7 @@ export const createConsultantChat = (): Chat => {
   return ai.chats.create({
     model: 'gemini-2.5-flash',
     config: {
-      systemInstruction: `Você é "Nova", uma arquiteta de soluções técnicas sênior da Agência NovaDev.
+      systemInstruction: `Você é "Nova", uma arquiteta de soluções técnicas sênior da Agência NovaDevX.
       Seu objetivo é consultar clientes em potencial que desejam criar aplicativos da web (Landing Pages, CMS ou SaaS).
       
       1. Converse APENAS em PORTUGUÊS.
@@ -61,45 +61,11 @@ export const generateProjectBrief = async (conversationHistory: string): Promise
   }
 };
 
-export const generateProjectCode = async (brief: ProjectBrief): Promise<string | null> => {
-  try {
-    const response = await ai.models.generateContent({
-      model: 'gemini-2.5-flash',
-      contents: `Atue como um Desenvolvedor Frontend Sênior Especialista.
-      Crie o código HTML completo (single file) para o seguinte projeto:
-      
-      Título: ${brief.title}
-      Descrição: ${brief.summary}
-      Tipo: ${brief.techStack.join(', ')}
-
-      Requisitos Obrigatórios:
-      1. Use HTML5 e Tailwind CSS via CDN (<script src="https://cdn.tailwindcss.com"></script>).
-      2. O design deve ser moderno, escuro (Dark Mode), profissional e impressionante. Estilo "Awwwards".
-      3. Inclua seções como: Header, Hero (com CTA), Features, e Footer.
-      4. Use ícones SVG inline ou fontes de sistema.
-      5. O código deve estar pronto para rodar.
-      6. NÃO use blocos de markdown (\`\`\`html). Retorne APENAS o código HTML puro.
-      7. Todo o texto deve estar em PORTUGUÊS.
-      `,
-    });
-
-    let code = response.text;
-    // Cleanup markdown if present
-    if (code.startsWith('```')) {
-      code = code.replace(/^```html\s*/, '').replace(/^```\s*/, '').replace(/```$/, '');
-    }
-    return code;
-  } catch (error) {
-    console.error("Failed to generate code:", error);
-    return null;
-  }
-};
-
 export const generateConceptImage = async (prompt: string): Promise<string | null> => {
   try {
     const response = await ai.models.generateImages({
       model: 'imagen-4.0-generate-001',
-      prompt: `A modern, high-quality, sleek web application interface design for: ${prompt}. UI/UX design, dribbble style, clean lines, dark mode.`,
+      prompt: `High fidelity website screenshot, professional UI/UX design, landing page for: ${prompt}. Modern, clean, dark mode, trending on Dribbble, 4k resolution.`,
       config: {
         numberOfImages: 1,
         outputMimeType: 'image/jpeg',

@@ -65,7 +65,7 @@ const App: React.FC = () => {
         <div className="container mx-auto px-6">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-16">
             <div className="col-span-1 md:col-span-2">
-              <h2 className="text-2xl font-bold text-white mb-4">NovaDev Agency</h2>
+              <h2 className="text-2xl font-bold text-white mb-4">NovaDevX Agency</h2>
               <p className="text-slate-400 max-w-md leading-relaxed mb-6">
                 Somos uma agência digital com visão de futuro, especializada na construção de aplicações web escaláveis e de alto desempenho para empresas modernas.
                 Impulsionada por expertise humana e inteligência artificial.
@@ -94,7 +94,7 @@ const App: React.FC = () => {
               <ul className="space-y-4 text-slate-400">
                 <li className="flex items-center gap-3">
                   <Mail className="w-5 h-5 text-cyan-500" />
-                  hello@novadev.agency
+                  hello@novadevx.agency
                 </li>
                 <li className="flex items-center gap-3">
                   <Phone className="w-5 h-5 text-cyan-500" />
@@ -109,7 +109,7 @@ const App: React.FC = () => {
           </div>
           
           <div className="border-t border-slate-900 pt-8 flex flex-col md:flex-row justify-between items-center text-slate-500 text-sm">
-            <p>© {new Date().getFullYear()} NovaDev Agency. Todos os direitos reservados.</p>
+            <p>© {new Date().getFullYear()} NovaDevX Agency. Todos os direitos reservados.</p>
             <div className="flex gap-6 mt-4 md:mt-0">
               <a href="#" className="hover:text-slate-300 transition-colors">Política de Privacidade</a>
               <a href="#" className="hover:text-slate-300 transition-colors">Termos de Serviço</a>

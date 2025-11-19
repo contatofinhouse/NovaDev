@@ -23,14 +23,14 @@ const ProjectPage: React.FC<ProjectPageProps> = ({ project, onBack }) => {
       );
     }
 
-    // Fallback to image if code failed but image exists (legacy support)
+    // AI Generated Image or Legacy Preview
     if (project.previewImage) {
       return (
-        <div className="w-full h-full bg-slate-100 overflow-y-auto">
+        <div className="w-full h-full bg-slate-900 flex items-center justify-center overflow-hidden">
           <img 
             src={project.previewImage} 
             alt={`Visual do projeto ${project.title}`} 
-            className="w-full h-auto object-cover shadow-sm"
+            className="w-full h-full object-cover opacity-90"
           />
         </div>
       );
@@ -188,14 +188,14 @@ const ProjectPage: React.FC<ProjectPageProps> = ({ project, onBack }) => {
                 </li>
               </ul>
             </div>
-
-            {project.generatedHtml && (
-              <div className="p-4 bg-green-900/20 border border-green-800 rounded-xl">
-                <div className="flex items-center gap-2 mb-2 text-green-400 font-bold text-sm">
-                  <Code className="w-4 h-4" /> Código Gerado com Sucesso
+            
+            {project.previewImage && (
+              <div className="p-4 bg-blue-900/20 border border-blue-800 rounded-xl">
+                <div className="flex items-center gap-2 mb-2 text-blue-400 font-bold text-sm">
+                  <ImageIcon className="w-4 h-4" /> Conceito Visual Gerado
                 </div>
                 <p className="text-xs text-slate-400">
-                  Esta é uma prévia funcional gerada pela IA em tempo real baseada no seu briefing.
+                  Esta é uma imagem conceitual de alta fidelidade gerada pela IA baseada no seu briefing.
                 </p>
               </div>
             )}
@@ -212,7 +212,7 @@ const ProjectPage: React.FC<ProjectPageProps> = ({ project, onBack }) => {
                       <div className="w-3 h-3 rounded-full bg-green-500"></div>
                    </div>
                    <div className="flex-1 bg-slate-950/50 rounded-md px-4 py-1 text-xs text-slate-500 text-center font-mono truncate">
-                      {project.generatedHtml ? 'https://preview.novadev-ai.gen/live' : `https://novadev-clients.com/${project.id}`}
+                      {project.generatedHtml ? 'https://preview.novadevx-ai.gen/live' : `https://novadevx-clients.com/${project.id}`}
                    </div>
                 </div>
                 

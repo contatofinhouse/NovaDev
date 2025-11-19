@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Send, Bot, User, Sparkles, Loader2, FileText, Code2, Zap } from 'lucide-react';
+import { Send, Bot, User, Sparkles, Loader2, FileText, Image as ImageIcon, Zap } from 'lucide-react';
 import { Chat } from "@google/genai";
-import { createConsultantChat, generateProjectBrief, generateProjectCode } from '../services/geminiService';
+import { createConsultantChat, generateProjectBrief, generateConceptImage } from '../services/geminiService';
 import { Message, ProjectBrief } from '../types';
 import { ProjectData } from './PortfolioSection';
 
@@ -16,7 +16,7 @@ const Consultant: React.FC<ConsultantProps> = ({ onViewProject }) => {
   const [isTyping, setIsTyping] = useState(false);
   const [projectBrief, setProjectBrief] = useState<ProjectBrief | null>(null);
   const [isGeneratingBrief, setIsGeneratingBrief] = useState(false);
-  const [isGeneratingCode, setIsGeneratingCode] = useState(false);
+  const [isGeneratingImage, setIsGeneratingImage] = useState(false);
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
@@ -68,13 +68,14 @@ const Consultant: React.FC<ConsultantProps> = ({ onViewProject }) => {
 
   const handleGenerateAndNavigate = async () => {
      if (!projectBrief) return;
-     setIsGeneratingCode(true);
+     setIsGeneratingImage(true);
      
      try {
-       // Generate actual code instead of just an image
-       const generatedHtml = await generateProjectCode(projectBrief);
+       // Generate concept image (screenshot)
+       const prompt = `${projectBrief.title} - ${projectBrief.summary}`;
+       const imageUrl = await generateConceptImage(prompt);
        
-       if (generatedHtml && onViewProject) {
+       if (imageUrl && onViewProject) {
          // Determine category based on title or default
          let category: 'SaaS' | 'Landing Page' | 'CMS' = 'Landing Page';
          const lowerTitle = projectBrief.title.toLowerCase();
@@ -93,15 +94,15 @@ const Consultant: React.FC<ConsultantProps> = ({ onViewProject }) => {
             description: projectBrief.summary,
             imageGradient: 'from-slate-700 to-slate-900',
             techStack: projectBrief.techStack,
-            generatedHtml: generatedHtml
+            previewImage: imageUrl
          };
          
          onViewProject(generatedProject);
        }
      } catch (err) {
-       console.error("Error generating full project view", err);
+       console.error("Error generating project view", err);
      } finally {
-       setIsGeneratingCode(false);
+       setIsGeneratingImage(false);
      }
   };
 
@@ -253,18 +254,18 @@ const Consultant: React.FC<ConsultantProps> = ({ onViewProject }) => {
 
                     <button 
                        onClick={handleGenerateAndNavigate}
-                       disabled={isGeneratingCode}
+                       disabled={isGeneratingImage}
                        className="w-full py-4 mt-4 bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-500 hover:to-violet-500 text-white rounded-xl font-bold flex items-center justify-center gap-2 transition-all disabled:opacity-50 shadow-lg shadow-indigo-900/30 relative overflow-hidden group"
                     >
-                      {isGeneratingCode ? (
+                      {isGeneratingImage ? (
                          <> 
                            <Loader2 className="w-5 h-5 animate-spin" /> 
-                           <span>Escrevendo Código...</span>
+                           <span>Criando Visual do Site...</span>
                          </>
                       ) : (
                          <> 
-                           <Code2 className="w-5 h-5" /> 
-                           <span>Gerar Site Funcional</span>
+                           <ImageIcon className="w-5 h-5" /> 
+                           <span>Gerar Screenshot Conceitual</span>
                            <Zap className="w-4 h-4 text-yellow-400 ml-auto opacity-0 group-hover:opacity-100 transition-opacity" />
                          </>
                       )}

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Menu, X, Code } from 'lucide-react';
+import { Menu, X, Command } from 'lucide-react';
 
 interface NavigationProps {
   onNavigate: (section: string) => void;
@@ -32,14 +32,15 @@ const Navigation: React.FC<NavigationProps> = ({ onNavigate }) => {
     >
       <div className="container mx-auto px-6 flex justify-between items-center">
         <div 
-          className="flex items-center gap-2 cursor-pointer" 
+          className="flex items-center gap-2 cursor-pointer group" 
           onClick={() => onNavigate('hero')}
         >
-          <div className="bg-gradient-to-br from-cyan-500 to-blue-600 p-2 rounded-lg">
-            <Code className="w-6 h-6 text-white" />
+          {/* Minimal Logo */}
+          <div className="relative">
+             <Command className="w-6 h-6 text-cyan-500 group-hover:rotate-90 transition-transform duration-500" />
           </div>
-          <span className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-white to-slate-400">
-            NovaDev
+          <span className="text-2xl font-bold tracking-tighter text-white">
+            NovaDev<span className="text-cyan-500">X</span>
           </span>
         </div>
 
